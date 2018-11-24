@@ -5,7 +5,7 @@ export default function TaskList(props) {
     let tasks = props.tasks;
     let taskUI = tasks.map((task) => {
         return (
-            <Task data={task} />
+            <Task key={task.id} data={task} />
         );
     });
     return (
