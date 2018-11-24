@@ -12,12 +12,13 @@ class App extends Component {
     this.onTodoRemove = this.onTodoRemove.bind(this);
     this.onTaskAdd = this.onTaskAdd.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onInputKeyDown = this.onInputKeyDown.bind(this);
     this.state = {
       newTask: "",
       tasks: [
-        { id: 1, "title": "Task 1", done: false },
-        { id: 2, "title": "Task 2", done: true },
-        { id: 3, "title": "Task 3", done: false },
+        { id: 1, "title": "Task 1", done: false, edit: false },
+        { id: 2, "title": "Task 2", done: true, edit: false },
+        { id: 3, "title": "Task 3", done: false, edit: false },
       ]
     }
   }
@@ -61,17 +62,70 @@ class App extends Component {
       tasks
     });
   }
+
+  onInputKeyDown(e) {
+    if (e.which === 13) {  //enter key
+      let editTask = this.editInput.value;
+
+      let tasks = this.state.tasks.map((t) => {
+        if (t.edit) {
+          t.title = editTask;
+          t.edit = false;
+        }
+        return t;
+      });
+
+      this.setState({
+        tasks
+      });
+
+    }
+  }
+
+  onToggleEdit(taskId) {
+    let tasks = this.state.tasks.map((task) => {
+      if (task.id === taskId) {
+        task.edit = !task.edit;
+      }
+      return task;
+    });
+
+    this.setState({
+      tasks
+    });
+  }
+
+
+  editUI(task) {
+    return (
+      <input type="text" ref={(editInput) => { this.editInput = editInput }}
+        onKeyDown={this.onInputKeyDown} defaultValue={task.title} />
+    );
+  }
+
+  displayUI(task) {
+    return (
+      <span>{task.title}</span>
+    );
+  }
   render() {
     let taskUI = this.state.tasks.map((task) => {
       let taskStyle = {};
       if (task.done) {
         taskStyle = taskCompleteStyle;
       }
+
+      let todoUI = task.edit ? this.editUI(task) : this.displayUI(task);
+
       return (
         <li key={task.id} style={taskStyle}
           onDoubleClick={() => { this.onToggleTask(task.id) }}>
-          <span>{task.title}
-            <button onClick={() => { this.onTodoRemove(task.id) }} >X</button></span>
+          <span>{todoUI}
+            <button
+              onClick={() => { this.onTodoRemove(task.id) }} >X</button>
+            <button
+              onClick={() => { this.onToggleEdit(task.id) }} >edit</button>
+          </span>
         </li>
 
       );
