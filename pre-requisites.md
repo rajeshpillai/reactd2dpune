@@ -10,6 +10,7 @@ reconciliation/diffing
 
 function Task () {
 
+// Bad practice
     this.addTask = function () {
 
     }
@@ -19,7 +20,7 @@ function Task () {
 }
 
 Task.prototype.addTask = function () {
-    
+
 }
 
 
