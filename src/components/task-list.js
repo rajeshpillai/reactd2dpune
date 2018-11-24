@@ -1,24 +1,16 @@
 import React from 'react';
 import Task from './task';
 
-
-
-export default class TaskList extends React.Component {
-
-    render() {
-        let tasks = this.props.tasks;
-        let taskUI = tasks.map((task) => {
-            return (
-                <Task data={task} />
-            );
-        });
-
-        console.log(taskUI);
+export default function TaskList(props) {
+    let tasks = props.tasks;
+    let taskUI = tasks.map((task) => {
         return (
-            <ul>
-                {taskUI}
-            </ul>
+            <Task data={task} />
         );
-
-    }
+    });
+    return (
+        <ul>
+            {taskUI}
+        </ul >
+    );
 }
