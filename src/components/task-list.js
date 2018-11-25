@@ -31,7 +31,8 @@ export default class TaskList extends React.Component {
         let taskUI = tasks.map((task) => {
             return (
                 <div>
-                    <Task key={task.id} data={task} />
+                    <Task key={task.id} data={task}
+                        onRatingChange={this.props.onRatingChange} />
                     <button onClick={this.showModal}>Show Task</button>
                     <Modal
                         onClose={this.onClose}

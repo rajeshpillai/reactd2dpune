@@ -1,6 +1,9 @@
 import React from 'react';
 import TaskList from './task-list';
 import TaskForm from './task-form';
+import Photo from './photo';
+import WithBorder from './hoc/with-border';
+import WithTransparent from './hoc/with-transparent';
 
 export default class TaskApp extends React.Component {
     constructor() {
@@ -8,13 +11,14 @@ export default class TaskApp extends React.Component {
         this.onTaskAdd = this.onTaskAdd.bind(this);
         this.onTodoRemove = this.onTodoRemove.bind(this);
         this.onInputKeyDown = this.onInputKeyDown.bind(this);
+        this.onRatingChange = this.onRatingChange.bind(this);
 
         this.state = {
             newTask: "",
             tasks: [
-                { id: 1, "title": "Task 1", done: false, edit: false },
-                { id: 2, "title": "Task 2", done: true, edit: false },
-                { id: 3, "title": "Task 3", done: false, edit: false },
+                { id: 1, "title": "Task 1", done: false, edit: false, rating: 5 },
+                { id: 2, "title": "Task 2", done: true, edit: false, rating: 0 },
+                { id: 3, "title": "Task 3", done: false, edit: false, rating: 2 },
             ]
         }
     }
@@ -75,7 +79,18 @@ export default class TaskApp extends React.Component {
     }
 
 
+    onRatingChange(taskId, rating) {
+        let tasks = this.state.tasks.map((task) => {
+            if (task.id === taskId) {
+                task.rating = rating;
+            }
+            return task;
+        });
 
+        this.setState({
+            tasks
+        });
+    }
 
     onTaskAdd(addedTask) {
         let newTask = {
@@ -90,12 +105,13 @@ export default class TaskApp extends React.Component {
     }
 
     render() {
-
+        let BorderedTransPhoto = WithBorder(WithTransparent(Photo));
         return (
             <div>
                 <h2>Task App</h2>
+                <BorderedTransPhoto />
                 <TaskForm onTaskAdd={this.onTaskAdd} />
-                <TaskList tasks={this.state.tasks} />
+                <TaskList onRatingChange={this.onRatingChange} tasks={this.state.tasks} />
 
             </div>
         );

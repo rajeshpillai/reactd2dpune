@@ -1,4 +1,6 @@
 import React from 'react';
+import Mouse from './renderprops/mouse';
+import StarRating from './startrating';
 
 const taskCompleteStyle = {
     textDecoration: "line-through",
@@ -25,15 +27,20 @@ export default class Task extends React.Component {
         let todoUI = task.edit ? this.editUI(task) : this.displayUI(task);
 
         return (
-            <li key={task.id} style={taskStyle}
-                onDoubleClick={() => { this.onToggleTask(task.id) }}>
-                <span>{todoUI}
-                    <button
-                        onClick={() => { this.onTodoRemove(task.id) }} >X</button>
-                    <button
-                        onClick={() => { this.onToggleEdit(task.id) }} >edit</button>
-                </span>
-            </li>
+            <Mouse render={(mouse) => (
+                <li key={task.id} style={taskStyle}
+                    onDoubleClick={() => { this.onToggleTask(task.id) }}>
+                    <span>{mouse.x},{mouse.y}</span>
+                    <span>{todoUI}
+                        <button
+                            onClick={() => { this.onTodoRemove(task.id) }} >X</button>
+                        <button
+                            onClick={() => { this.onToggleEdit(task.id) }} >edit</button>
+                    </span>
+                    <StarRating rating={task.rating}
+                        onRatingChange={this.props.onRatingChange} />
+                </li>
+            )} />
 
         );
     }
